@@ -1,18 +1,22 @@
 <template>
-  <div id="app">
-      <Header v-bind="headerParams"/>
-      <router-view/>
-  </div>
+    <div id="app">
+<!--        <Header v-bind="headerParams"/>-->
+        <MyCanvas/>
+        <InputForm/>
+    </div>
 </template>
 
 <script>
 import Header from "@/components/Header.vue";
-
+import MyCanvas from "@/components/MyCanvas.vue";
+import InputForm from "@/components/InputForm.vue";
 
 export default {
     name: 'App',
     components: {
         Header,
+        MyCanvas,
+        InputForm
     },
     data() {
         return {
