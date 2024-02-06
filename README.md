@@ -1,2 +1,4 @@
-![image](https://github.com/KayotPoziloy/ITMO-web-programing-no.4/assets/78742120/10901adf-12ca-428f-a522-44e8bde5cd9a)
-![image](https://github.com/KayotPoziloy/ITMO-web-programing-no.4/assets/78742120/b469ddeb-f302-47e2-a3a5-fa83b52ad0f8)
+![image](https://github.com/KayotPoziloy/ITMO-web-programing-no.4/assets/78742120/b220c422-03ec-43d6-868c-9fec057aa2a2)
+![image](https://github.com/KayotPoziloy/ITMO-web-programing-no.4/assets/78742120/6da50f5f-f627-45da-8f22-37fe4792e8e5)
+
+
