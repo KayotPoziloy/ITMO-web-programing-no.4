@@ -41,48 +41,24 @@ export default {
     methods: {
         logIn(e) {
             e.preventDefault(); // предотвращает перезагрузку страницы
-            this.$router.push({name: 'app-page'}) // перенаправляет пользователя на страницу
             // отправка данных по юрл
-            this.$axios.post('http://localhost:8080/test', {
+            this.$axios.post('http://localhost:8080/api/login', {
                 login: this.login,
                 password: this.password
-            }).then(response => { // обработка успешного ответа
-                localStorage.setItem("jwt", response.data);
-                this.$router.push({name: 'app-page'});
-            }).catch(error => {
-                this.AxiosErrorHandler(error.response.data);
             });
+            console.log("отправлен" + this.login);
         },
         register(e) {
             e.preventDefault();
-            this.$axios.put('http://localhost:8890/api/user', {
+            this.$axios.post('http://localhost:8080/api/register', {
                 login: this.login,
                 password: this.password
-            }).then(() => {
-                this.$notify({
-                    group: 'success',
-                    title: 'Регистрация',
-                    text: 'Теперь, вы можете войти',
-                    type: 'success'
-                });
-            }).catch(error => {
-                this.AxiosErrorHandler(error.response.data);
             });
+            console.log("отправлен" + this.login);
         },
         test(e) {
             e.preventDefault();
-            this.$axios.get('http://localhost:8080/test', {
-                login: this.login,
-                password: this.password
-            })
-        },
-        AxiosErrorHandler(errorText) {
-            this.$notify({
-                group: 'error',
-                title: 'Error',
-                text: errorText,
-                type: 'error'
-            })
+            this.$axios.get('http://localhost:8080/user/all');
         }
     }
 }
