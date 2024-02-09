@@ -12,6 +12,7 @@
               <a>20001</a>
             </span>
         </div>
+        <button v-on:click="exit">Выход</button>
     </header>
 </template>
 
@@ -21,6 +22,12 @@ export default {
     props: {
         title: String,
         authorName: String,
+    },
+    methods: {
+        exit() {
+            localStorage.removeItem("jwt");
+            window.location.reload();
+        }
     }
 }
 </script>

@@ -25,6 +25,12 @@ public class AuthService {
         userRepository.save(user);
     }
 
+    public String createToken(String login) {
+
+        String token = login;
+        return token;
+    }
+
     public String check(String authorization) {
         if (!authorization.startsWith("Basic"))
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid Authorization header");

@@ -24,7 +24,9 @@ public class AuthController {
         try {
             authService.register(req.getLogin(), req.getPassword());
             logger.info("Пользователь {} успешно зарегистрирован", req.getLogin());
-            return new ResponseEntity<>("Success", HttpStatus.ACCEPTED);
+
+            String token = authService.createToken(req.getLogin());
+            return ResponseEntity.ok(token);
         } catch (ResponseStatusException e) {
             return new ResponseEntity<>(e.getReason(), HttpStatus.BAD_REQUEST);
         }
@@ -35,7 +37,8 @@ public class AuthController {
         try {
             authService.check(authorization);
             logger.info("Пользователь есть");
-            return new ResponseEntity<>("Success", HttpStatus.ACCEPTED);
+            String token = authService.check(authorization);
+            return ResponseEntity.ok(token);
         } catch (ResponseStatusException e) {
             return new ResponseEntity<>(e.getReason(), e.getStatusCode());
         }

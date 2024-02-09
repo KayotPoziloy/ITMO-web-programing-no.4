@@ -48,6 +48,8 @@ export default {
                     'Authorization': `Basic ${base64Credentials}`
                 }
             }).then(response => {
+                localStorage.setItem("jwt", response.data);
+                console.log(localStorage.getItem("jwt"));
                 this.$router.push({name: 'app-page'});
             }).catch(error => {
                 this.AxiosErrorHandler(error.response.data);
@@ -60,7 +62,9 @@ export default {
                 login: this.login,
                 password: this.password
             }).then(response => {
-                // если рега прошла успешно, пользователь перенаправляется на основную страницу
+                // если рега прошла успешно, пользователь перенаправляется
+                // на основную страницу и сохраняется токен авторизации
+                localStorage.setItem("jwt", response.data);
                 this.$router.push({name: 'app-page'});
             }).catch(error => {
                 this.AxiosErrorHandler(error.response.data);
