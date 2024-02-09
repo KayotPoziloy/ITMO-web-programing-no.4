@@ -41,24 +41,43 @@ export default {
     methods: {
         logIn(e) {
             e.preventDefault(); // предотвращает перезагрузку страницы
+            const base64Credentials = btoa(`${this.login}:${this.password}`);
             // отправка данных по юрл
-            this.$axios.post('http://localhost:8080/api/login', {
-                login: this.login,
-                password: this.password
+            this.$axios.post('http://localhost:8080/api/login', null, {
+                headers: {
+                    'Authorization': `Basic ${base64Credentials}`
+                }
+            }).then(response => {
+                this.$router.push({name: 'app-page'});
+            }).catch(error => {
+                this.AxiosErrorHandler(error.response.data);
             });
-            console.log("отправлен" + this.login);
+            console.log("отправлен " + this.login);
         },
         register(e) {
             e.preventDefault();
             this.$axios.post('http://localhost:8080/api/register', {
                 login: this.login,
                 password: this.password
+            }).then(response => {
+                // если рега прошла успешно, пользователь перенаправляется на основную страницу
+                this.$router.push({name: 'app-page'});
+            }).catch(error => {
+                this.AxiosErrorHandler(error.response.data);
             });
             console.log("отправлен" + this.login);
         },
         test(e) {
             e.preventDefault();
             this.$axios.get('http://localhost:8080/user/all');
+        },
+        AxiosErrorHandler(errorText) {
+            this.$notify({
+                group: 'error',
+                title: 'Error',
+                text: errorText,
+                type: 'error'
+            })
         }
     }
 }

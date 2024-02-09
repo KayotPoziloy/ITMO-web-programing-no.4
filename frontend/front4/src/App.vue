@@ -3,15 +3,21 @@
       <Header v-bind="headerParams"/>
       <router-view/>
   </div>
+  <div>
+      <notifications group="error" position="bottom right"/>
+      <notifications group="success" position="bottom right"/>
+  </div>
 </template>
 
 <script>
 import Header from "@/components/Header.vue";
+import {Notifications} from "@kyvg/vue3-notification";
 
 
 export default {
     name: 'App',
     components: {
+        Notifications,
         Header,
     },
     data() {

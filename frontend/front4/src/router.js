@@ -9,9 +9,6 @@ const router = createRouter({
             path: '/',
             name: 'default-page',
             component: Registration,
-            beforeEnter(to, from, next) {
-                (localStorage.getItem("jwt") !== null) ? next({name: 'app-page'}) : next({name: 'auth-page'});
-            }
         },
         {
             path: '/auth',
