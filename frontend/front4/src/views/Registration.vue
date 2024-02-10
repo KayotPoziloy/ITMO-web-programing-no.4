@@ -48,6 +48,7 @@ export default {
                     }
                 }).then(response => {
                     localStorage.setItem("jwt", response.data);
+                    localStorage.setItem("login", this.login);
                     console.log(localStorage.getItem("jwt"));
                     this.$router.push({name: 'app-page'});
                 }).catch(error => {
