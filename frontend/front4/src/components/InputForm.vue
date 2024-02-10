@@ -1,20 +1,26 @@
 <template>
     <div class="Input">
         <form @submit.prevent="handleSubmit">
-            <label for="xInput">Координата X:</label>
-            <select v-model="x" id="xInput">
-                <option v-for="value in xValues" :key="value">{{ value }}</option>
-            </select>
+            <div>
+                <label for="xInput">Координата X:</label>
+                <select v-model="x" id="xInput">
+                    <option v-for="value in xValues" :key="value" @input="validateX">{{ value }}</option>
+                </select>
+            </div>
 
-            <label for="yInput">Координата Y(-5,...,3):</label>
-            <input v-model="y" id="yInput" type="text" @input="validateY"/>
+            <div>
+                <label for="yInput">Координата Y(-5,...,3):</label>
+                <input v-model="y" id="yInput" type="text" @input="validateY"/>
+            </div>
 
-            <label for="rInput">Радиус R:</label>
-            <select v-model="r" id="rInput">
-                <option v-for="value in rValues" :key="value">{{ value }}</option>
-            </select>
+            <div>
+                <label for="rInput">Радиус R:</label>
+                <select v-model="r" id="rInput">
+                    <option v-for="value in rValues" :key="value" @input="validateR">{{ value }}</option>
+                </select>
+            </div>
 
-            <button type="submit">Отправить</button>
+            <button type="submit" v-on:click="sending">Отправить</button>
         </form>
     </div>
 </template>
@@ -34,8 +40,23 @@ export default {
         validateY() {
             console.log("проверено")
         },
+        validateX() {
+
+        },
+        validateR() {
+
+        },
         handleSubmit() {
             console.log("отправлено")
+        },
+        // отправка точек на сервер
+        sending(e) {
+            e.preventDefault();
+            this.$axios.post('http://localhost:8080/дописать', {
+                x: this.x,
+                y: this.y,
+                r: this.r
+            });
         }
     }
 }

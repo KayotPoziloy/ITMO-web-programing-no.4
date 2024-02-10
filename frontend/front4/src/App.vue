@@ -1,7 +1,15 @@
 <template>
   <div id="app">
-      <Header v-bind="headerParams"/>
-      <router-view/>
+      <table border="1" cellpadding="0" cellspacing="0" width="100%">
+          <thead>
+          <Header v-bind="headerParams"/>
+          </thead>
+          <tbody>
+          <router-view/>
+          </tbody>
+      </table>
+
+
   </div>
   <div>
       <notifications group="error" position="bottom right"/>
