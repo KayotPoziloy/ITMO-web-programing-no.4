@@ -1,5 +1,5 @@
 <template>
-    <canvas ref="canvas" id="canvas_plot" width="500" height="500"/>
+    <canvas ref="canvas" id="canvas_plot" width="500" height="500" v-on:click="checkPoint"/>
 </template>
 
 <script>
@@ -11,7 +11,8 @@ export default {
             canvasHeight: 500,
             xAxis: 250,
             yAxis: 250,
-            radius: 200
+            radius: 200,
+            rSplit: 200,
         };
     },
     mounted() {
@@ -22,6 +23,35 @@ export default {
         this.r();
     },
     methods: {
+        checkPoint(e, event) {
+            const canvas = this.$refs.canvas;
+
+            // получение координат в пикселях
+            let x = event.offsetX - this.xAxis;
+            let y = -(event.offsetY - this.yAxis);
+
+            // получение масштаба r
+            let r = document.getElementById("rInput").value;
+
+            // получаем координаты в масштабах r
+            x /= this.rSplit;
+            y /= this.rSplit;
+
+            // получаем координаты в заданных масштабах
+            x *= r;
+            y *= r;
+
+            this.sending(e, x, y, r)
+            console.log("тыкается", x, y, r);
+        },
+        sending(e, x, y, r) {
+            e.preventDefault();
+            this.$axios.post('http://localhost:8080/дописать', {
+                x: x,
+                y: y,
+                r: r
+            });
+        },
         clearCanvas() {
             this.ctx.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
             // дописать
