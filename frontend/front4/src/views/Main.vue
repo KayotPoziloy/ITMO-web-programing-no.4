@@ -20,11 +20,11 @@
                                 <th>R</th>
                                 <th>Результат</th>
                             </tr>
-                            <tr>
-                                <td>1</td>
-                                <td>1</td>
-                                <td>1</td>
-                                <td>да</td>
+                            <tr v-for="dot in dots" :key="dot.id">
+                                <td>{{ dot.x }}</td>
+                                <td>{{ dot.y }}</td>
+                                <td>{{ dot.r }}</td>
+                                <td>{{ dot.status }}</td>
                             </tr>
                         </table>
                     </td>
@@ -53,8 +53,30 @@ export default {
             headerParams: {
                 title: "Лабораторная работа №4",
                 authorName: "Яхонтов Максим"
-            }
+            },
+            dots: [], // массив для хранения данных
         }
+    },
+    mounted() {
+        this.fetchDataFromServer();
+
+        this.intervalId = setInterval(() => {
+            this.fetchDataFromServer();
+        }, 1000);
+    },
+    beforeDestroy() {
+        clearInterval(this.intervalId);
+    },
+    methods: {
+        async fetchDataFromServer() {
+            try {
+                const login = localStorage.getItem("login");
+                const response = await this.$axios.get(`http://localhost:8080/api/dots?login=${login}`);
+                this.dots = response.data;
+            } catch (error) {
+                console.error(error);
+            }
+        },
     }
 }
 

@@ -40,11 +40,12 @@ export default {
     },
     methods: {
         validateY() {
-            if (parseFloat(this.y) >= -5 && parseFloat(this.y) <= 3) {
+            if (!isNaN(parseFloat(this.y)) && parseFloat(this.y) >= -5 && parseFloat(this.y) <= 3) {
                 console.log("проверено y")
                 return true;
             } else {
                 console.log("не проверено y")
+                // вывод ошибки
                 return false;
             }
         },
@@ -54,6 +55,7 @@ export default {
                 return true;
             } else {
                 console.log("не проверено x")
+                // вывод ошибки
                 return false;
             }
         },
@@ -63,6 +65,7 @@ export default {
                 return true;
             } else {
                 console.log("не проверено r")
+                // вывод ошибки
                 return false;
             }
         },
