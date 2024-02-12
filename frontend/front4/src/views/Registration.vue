@@ -70,6 +70,7 @@ export default {
                     // если рега прошла успешно, пользователь перенаправляется
                     // на основную страницу и сохраняется токен авторизации
                     localStorage.setItem("jwt", response.data);
+                    localStorage.setItem("login", this.login);
                     this.$router.push({name: 'app-page'});
                 }).catch(error => {
                     this.AxiosErrorHandler(error.response.data);
