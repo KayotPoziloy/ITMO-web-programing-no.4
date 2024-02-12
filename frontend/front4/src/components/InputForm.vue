@@ -4,19 +4,19 @@
             <div>
                 <label for="xInput">Координата X:</label>
                 <select v-model="x" id="xInput">
-                    <option v-for="value in xValues" :key="value" @input="validateX">{{ value }}</option>
+                    <option v-for="value in xValues" :key="value">{{ value }}</option>
                 </select>
             </div>
 
             <div>
                 <label for="yInput">Координата Y(-5,...,3):</label>
-                <input v-model="y" id="yInput" type="text" @input="validateY"/>
+                <input v-model="y" id="yInput" type="text"/>
             </div>
 
             <div>
                 <label for="rInput">Радиус R:</label>
                 <select v-model="r" id="rInput">
-                    <option v-for="value in rValues" :key="value" @input="validateR">{{ value }}</option>
+                    <option v-for="value in rValues" :key="value">{{ value }}</option>
                 </select>
             </div>
 
@@ -33,30 +33,56 @@ export default {
             y: '',
             r: '-5',
             xValues: ['-5', '-4', '-3', '-2', '-1', '0', '1', '2', '3'],
-            rValues: ['-5', '-4', '-3', '-2', '-1', '0', '1', '2', '3']
+            rValues: ['-5', '-4', '-3', '-2', '-1', '0', '1', '2', '3'],
+            xValidValues: ['-5', '-4', '-3', '-2', '-1', '0', '1', '2', '3'],
+            rValidValues: ['-5', '-4', '-3', '-2', '-1', '0', '1', '2', '3'],
         };
     },
     methods: {
         validateY() {
-            console.log("проверено")
+            if (parseFloat(this.y) >= -5 && parseFloat(this.y) <= 3) {
+                console.log("проверено y")
+                return true;
+            } else {
+                console.log("не проверено y")
+                return false;
+            }
         },
         validateX() {
-
+            if (this.xValidValues.includes(this.x)) {
+                console.log("проверено x")
+                return true;
+            } else {
+                console.log("не проверено x")
+                return false;
+            }
         },
         validateR() {
-
+            if (this.rValidValues.includes(this.r)) {
+                console.log("проверено r")
+                return true;
+            } else {
+                console.log("не проверено r")
+                return false;
+            }
         },
         handleSubmit() {
-            console.log("отправлено")
         },
         // отправка точек на сервер
         sending(e) {
-            e.preventDefault();
-            this.$axios.post('http://localhost:8080/дописать', {
-                x: this.x,
-                y: this.y,
-                r: this.r
-            });
+            if (this.validateX() && this.validateY() && this.validateR()) {
+                e.preventDefault();
+                const data = {
+                    'x': this.x,
+                    'y': this.y,
+                    'r': this.r,
+                    'owner': localStorage.getItem("login")
+                }
+                this.$axios.post('http://localhost:8080/api/dots', data);
+                console.log("отправлено");
+            } else {
+                console.log("не отправлено");
+            }
         }
     }
 }
