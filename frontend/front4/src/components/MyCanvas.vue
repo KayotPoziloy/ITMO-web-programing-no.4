@@ -81,10 +81,21 @@ export default {
             let xValue = x / r * this.rSplit + this.xAxis - 2;
             let yValue = - (y / r * this.rSplit - this.yAxis + 2);
 
+            let checkCircle;
+            let checkTriangle;
+            let checkRectangle;
+
             // дописать для отрицательных r
-            let checkCircle = x <= 0 && y >= 0 && x*x + y*y <= (r/2)*(r/2);
-            let checkTriangle = x >= 0 && y >= 0 && y <= (-2*x + r);
-            let checkRectangle = x >= 0 && x <= r/2 && y <= 0 && y >= -r;
+            if (r >= 0) {
+                checkCircle = x <= 0 && y >= 0 && ((x*x + y*y) <= (r/2)*(r/2));
+                checkTriangle = x >= 0 && y >= 0 && y <= (-2*x + r);
+                checkRectangle = x >= 0 && x <= r/2 && y <= 0 && y >= -r;
+            } else {
+                checkCircle = x >= 0 && y <= 0 && x*x + y*y <= (r/2)*(r/2);
+                checkTriangle = x <= 0 && y <= 0 && y >= (-2*x + r);
+                checkRectangle = x <= 0 && x >= r/2 && y >= 0 && y <= -r;
+            }
+
 
             if (checkCircle || checkTriangle || checkRectangle) {
                 this.ctx.beginPath();
