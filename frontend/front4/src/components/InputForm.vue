@@ -13,12 +13,14 @@
                 <input v-model="y" id="yInput" type="text"/>
             </div>
 
-            <div>
+            <div >
                 <label for="rInput">Радиус R:</label>
-                <select v-model="r" id="rInput">
+                <select ref="rInput" v-model="r" id="rInput">
                     <option v-for="value in rValues" :key="value">{{ value }}</option>
                 </select>
             </div>
+
+<!--            <MyCanvas :rInputRef="rInput"/>-->
 
             <button type="submit" v-on:click="sending">Отправить</button>
         </form>
@@ -26,7 +28,16 @@
 </template>
 
 <script>
+import { reactive } from 'vue';
+// import {state} from "@/main.js";
+export const state = reactive({ rValue: 1 });
+
+
 export default {
+    // setup() {
+    //     const state = reactive({ rValue: 1});
+    //     return {state};
+    // },
     data() {
         return {
             x: '-5',
@@ -38,7 +49,16 @@ export default {
             rValidValues: ['-5', '-4', '-3', '-2', '-1', '0', '1', '2', '3'],
         };
     },
+    watch: {
+        r: function (newR, oldR) {
+            console.log("новый радиус", newR);
+            this.handleRChange(newR);
+        }
+    },
     methods: {
+        handleRChange(newR) {
+            state.rValue = newR;
+        },
         validateY() {
             if (!isNaN(parseFloat(this.y)) && parseFloat(this.y) >= -5 && parseFloat(this.y) <= 3) {
                 console.log("проверено y")
@@ -81,6 +101,8 @@ export default {
                     'r': this.r,
                     'owner': localStorage.getItem("login")
                 }
+
+
                 this.$axios.post('http://localhost:8080/api/dots', data);
                 console.log("отправлено");
             } else {

@@ -1,9 +1,25 @@
 <template>
-    <canvas ref="canvas" id="canvas_plot" width="500" height="500" @click="checkPoint"/>
+    <canvas @onload="dotSend" ref="canvas" id="canvas_plot" width="500" height="500" @click="checkPoint"/>
 </template>
 
 <script>
+import { ref, onMounted, watchEffect } from 'vue';
+import {state} from "@/components/InputForm.vue";
+
 export default {
+    // при выборе r в InputForm устанавливает в rState новое значение
+    setup() {
+        const rState = ref(state.rValue);
+
+        onMounted(() => {
+            watchEffect(() => {
+                rState.value = state.rValue;
+                console.log("изменение")
+            });
+        });
+
+        return { rState };
+    },
     data() {
         return {
             ctx: null,
@@ -13,17 +29,79 @@ export default {
             yAxis: 250,
             radius: 200,
             rSplit: 200,
+            resultsArray: [],
+            // rValue: -5,
+            rState: state.rValue
         };
     },
     mounted() {
         this.ctx = this.$refs.canvas.getContext('2d'); // получает <canvas>
         this.clearCanvas();
-        this.axis();
-        this.zone();
-        this.r();
+    },
+    // отслеживает изменение в переменной rState
+    watch: {
+        rState: function () {
+            this.dotSend();
+        }
     },
     methods: {
+        // записывает в массив resultsArray все координаты из таблицы
+        tableValues() {
+            this.resultsArray.length = 0;
+
+            const table = this.$parent.$refs.resultTable;
+
+            for (let i = 1; i < table.rows.length; i++) {
+                const row = table.rows[i];
+
+                const x = row.cells[0].innerText;
+                const y = row.cells[1].innerText;
+                const r = row.cells[2].innerText;
+                const result = row.cells[3].innerText;
+
+                const point = { x, y, r, result };
+                this.resultsArray.push(point);
+            }
+        },
+        // Отрисовка значений из таблицы
+        dotSend() {
+            this.clearCanvas();
+            this.tableValues();
+
+            this.resultsArray.forEach(result => {
+                this.dot(result);
+            });
+        },
+        // отрисовка точки
+        dot(result) {
+            let x = result.x;
+            let y = result.y;
+            let r = state.rValue;
+
+            let xValue = x / r * this.rSplit + this.xAxis - 2;
+            let yValue = - (y / r * this.rSplit - this.yAxis + 2);
+
+            // дописать для отрицательных r
+            let checkCircle = x <= 0 && y >= 0 && x*x + y*y <= (r/2)*(r/2);
+            let checkTriangle = x >= 0 && y >= 0 && y <= (-2*x + r);
+            let checkRectangle = x >= 0 && x <= r/2 && y <= 0 && y >= -r;
+
+            if (checkCircle || checkTriangle || checkRectangle) {
+                this.ctx.beginPath();
+                this.ctx.fillStyle = "blue"
+                this.ctx.fillRect(xValue, yValue, 4, 4,)
+                this.ctx.closePath();
+            } else {
+                this.ctx.beginPath();
+                this.ctx.fillStyle = "red"
+                this.ctx.fillRect(xValue, yValue, 4, 4,)
+                this.ctx.closePath();
+            }
+        },
+
+        // получение координат по клику
         checkPoint(event) {
+            this.dotSend();
             const canvas = this.$refs.canvas;
 
             // получение координат в пикселях
@@ -42,9 +120,8 @@ export default {
             y *= r;
 
             this.sending(event, x, y, r)
-            console.log("тыкается", x, y, r);
-            console.log(localStorage.getItem("login"));
         },
+        // отправка координат на сервер
         sending(e, x, y, r) {
             e.preventDefault();
             const data = {
@@ -55,10 +132,15 @@ export default {
             }
             this.$axios.post('http://localhost:8080/api/dots', data);
         },
+        // очистка канваса
         clearCanvas() {
             this.ctx.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
-            // дописать
+            this.axis();
+            this.zone();
+            this.r();
         },
+
+        // отрисовка канваса
         axis() {
             this.ctx.beginPath();
             this.ctx.moveTo(this.xAxis, 0);

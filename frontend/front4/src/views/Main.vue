@@ -13,7 +13,7 @@
                         <InputForm/>
                     </td>
                     <td style="width: 70%;">
-                        <table border="1" cellpadding="0" cellspacing="0" width="90%" class="result-table">
+                        <table ref="resultTable" border="1" cellpadding="0" cellspacing="0" width="90%" class="result-table">
                             <tr>
                                 <th>X</th>
                                 <th>Y</th>
