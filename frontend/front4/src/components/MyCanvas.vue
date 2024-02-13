@@ -37,7 +37,6 @@ export default {
         this.ctx = this.$refs.canvas.getContext('2d'); // получает <canvas>
         setTimeout(() => {
             this.dotSend();
-            console.log("r", state.rValue);
         }, 50);
     },
     // отслеживает изменение в переменной rState
@@ -69,7 +68,6 @@ export default {
         dotSend() {
             this.clearCanvas();
             this.tableValues();
-            console.log("table", this.resultsArray);
 
             this.resultsArray.forEach(result => {
                 this.dot(result);
@@ -88,19 +86,17 @@ export default {
             let checkTriangle;
             let checkRectangle;
 
-            // дописать для отрицательных r
             if (r >= 0) {
                 checkCircle = x <= 0 && y >= 0 && ((x*x + y*y) <= (r/2)*(r/2));
-                checkTriangle = x >= 0 && y >= 0 && y <= (-2*x + r);
+                checkTriangle = x >= 0 && y >= 0 && y <= (r-2*x);
                 checkRectangle = x >= 0 && x <= r/2 && y <= 0 && y >= -r;
             } else {
                 checkCircle = x >= 0 && y <= 0 && x*x + y*y <= (r/2)*(r/2);
-                checkTriangle = x <= 0 && y <= 0 && y >= (-2*x + r);
+                checkTriangle = x <= 0 && y <= 0 && y >= (r-2*x);
                 checkRectangle = x <= 0 && x >= r/2 && y >= 0 && y <= -r;
             }
 
-
-            if (checkCircle || checkTriangle || checkRectangle) {
+            if (checkTriangle || checkCircle || checkRectangle) {
                 this.ctx.beginPath();
                 this.ctx.fillStyle = "blue"
                 this.ctx.fillRect(xValue, yValue, 4, 4,)
@@ -115,7 +111,6 @@ export default {
 
         // получение координат по клику
         checkPoint(event) {
-            this.dotSend();
             const canvas = this.$refs.canvas;
 
             // получение координат в пикселях
@@ -133,7 +128,11 @@ export default {
             x *= r;
             y *= r;
 
-            this.sending(event, x, y, r)
+            this.sending(event, x, y, r);
+
+            setTimeout( () => {
+                this.dotSend();
+            }, 200);
         },
         // отправка координат на сервер
         sending(e, x, y, r) {

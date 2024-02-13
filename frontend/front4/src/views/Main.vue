@@ -62,7 +62,7 @@ export default {
 
         this.intervalId = setInterval(() => {
             this.fetchDataFromServer();
-        }, 1000);
+        }, 50);
     },
     beforeDestroy() {
         clearInterval(this.intervalId);
