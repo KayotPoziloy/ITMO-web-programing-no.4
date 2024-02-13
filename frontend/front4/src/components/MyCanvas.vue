@@ -1,5 +1,5 @@
 <template>
-    <canvas @onload="dotSend" ref="canvas" id="canvas_plot" width="500" height="500" @click="checkPoint"/>
+    <canvas ref="canvas" id="canvas_plot" width="500" height="500" @click="checkPoint"/>
 </template>
 
 <script>
@@ -14,7 +14,6 @@ export default {
         onMounted(() => {
             watchEffect(() => {
                 rState.value = state.rValue;
-                console.log("изменение")
             });
         });
 
@@ -36,7 +35,10 @@ export default {
     },
     mounted() {
         this.ctx = this.$refs.canvas.getContext('2d'); // получает <canvas>
-        this.clearCanvas();
+        setTimeout(() => {
+            this.dotSend();
+            console.log("r", state.rValue);
+        }, 50);
     },
     // отслеживает изменение в переменной rState
     watch: {
@@ -67,6 +69,7 @@ export default {
         dotSend() {
             this.clearCanvas();
             this.tableValues();
+            console.log("table", this.resultsArray);
 
             this.resultsArray.forEach(result => {
                 this.dot(result);

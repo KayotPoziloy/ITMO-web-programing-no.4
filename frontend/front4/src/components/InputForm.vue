@@ -30,7 +30,7 @@
 <script>
 import { reactive } from 'vue';
 // import {state} from "@/main.js";
-export const state = reactive({ rValue: 1 });
+export const state = reactive({ rValue: -5 });
 
 
 export default {
@@ -51,7 +51,6 @@ export default {
     },
     watch: {
         r: function (newR, oldR) {
-            console.log("новый радиус", newR);
             this.handleRChange(newR);
         }
     },
