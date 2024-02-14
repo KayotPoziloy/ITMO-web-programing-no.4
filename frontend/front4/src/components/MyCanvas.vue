@@ -38,8 +38,11 @@ export default {
         setTimeout(() => {
             this.dotSend();
         }, 50);
+        setInterval(() => {
+            this.dotSend();
+        }, 2000);
     },
-    // отслеживает изменение в переменной rState
+    // отслеживает изменение в переменной rState и вызывает dotSend()
     watch: {
         rState: function () {
             this.dotSend();
@@ -82,6 +85,7 @@ export default {
             let xValue = x / r * this.rSplit + this.xAxis - 2;
             let yValue = - (y / r * this.rSplit - this.yAxis + 2);
 
+            // проверка попадения точки в зону для правильной окраски
             let checkCircle;
             let checkTriangle;
             let checkRectangle;
@@ -96,6 +100,7 @@ export default {
                 checkRectangle = x <= 0 && x >= r/2 && y >= 0 && y <= -r;
             }
 
+            // окраска точек
             if (checkTriangle || checkCircle || checkRectangle) {
                 this.ctx.beginPath();
                 this.ctx.fillStyle = "blue"
@@ -145,6 +150,7 @@ export default {
             }
             this.$axios.post('http://localhost:8080/api/dots', data);
         },
+
         // очистка канваса
         clearCanvas() {
             this.ctx.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
@@ -163,6 +169,7 @@ export default {
             this.ctx.stroke();
             this.ctx.closePath();
         },
+        // отрисовка четверти круга
         circle() {
             this.ctx.beginPath();
             this.ctx.arc(this.xAxis, this.yAxis, this.radius/2, Math.PI, -Math.PI/2);
@@ -171,6 +178,7 @@ export default {
             this.ctx.fill();
             this.ctx.closePath();
         },
+        // отрисовка треугольника
         triangle() {
             this.ctx.beginPath();
             let x1 = this.xAxis;
@@ -188,6 +196,7 @@ export default {
             this.ctx.fill();
             this.ctx.closePath();
         },
+        // отрисовка прямоугольника
         square() {
             this.ctx.beginPath();
             let x1 = this.xAxis + this.radius/2;
@@ -208,11 +217,13 @@ export default {
             this.ctx.fill();
             this.ctx.closePath();
         },
+        // отрисовка всей зоны
         zone() {
             this.circle();
             this.triangle();
             this.square();
         },
+        // отрисовка подписей
         r() {
             this.ctx.beginPath();
             this.ctx.fillStyle = "black";

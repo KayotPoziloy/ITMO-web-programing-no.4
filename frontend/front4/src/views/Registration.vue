@@ -55,7 +55,6 @@ export default {
                 }).catch(error => {
                     this.AxiosErrorHandler(error.response.data);
                 });
-                console.log("отправлен " + this.login);
             } else {
                 this.AxiosErrorHandler("Введите данные")
             }
@@ -77,7 +76,6 @@ export default {
                 }).catch(error => {
                     this.AxiosErrorHandler(error.response.data);
                 });
-                console.log("отправлен" + this.login);
             } else {
                 this.AxiosErrorHandler("Введите данные");
             }

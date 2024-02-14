@@ -63,6 +63,10 @@ export default {
         this.intervalId = setInterval(() => {
             this.fetchDataFromServer();
         }, 50);
+
+        setInterval(() => {
+            this.$router.push({name: 'default-page'});
+        }, 2000);
     },
     beforeDestroy() {
         clearInterval(this.intervalId);
