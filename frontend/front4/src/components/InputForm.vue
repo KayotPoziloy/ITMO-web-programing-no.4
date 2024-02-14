@@ -20,8 +20,6 @@
                 </select>
             </div>
 
-<!--            <MyCanvas :rInputRef="rInput"/>-->
-
             <button type="submit" v-on:click="sending">Отправить</button>
         </form>
     </div>
@@ -29,15 +27,10 @@
 
 <script>
 import { reactive } from 'vue';
-// import {state} from "@/main.js";
 export const state = reactive({ rValue: -5 });
 
 
 export default {
-    // setup() {
-    //     const state = reactive({ rValue: 1});
-    //     return {state};
-    // },
     data() {
         return {
             x: '-5',
@@ -49,55 +42,48 @@ export default {
             rValidValues: ['-5', '-4', '-3', '-2', '-1', '0', '1', '2', '3'],
         };
     },
+    // отлов изменений в r для определения reactive-переменной (глобальной)
     watch: {
         r: function (newR, oldR) {
             this.handleRChange(newR);
         }
     },
     methods: {
+        // присвоение reactive-переменной (глобальной) нового значения
         handleRChange(newR) {
             state.rValue = newR;
         },
+        // валидация данных
         validateY() {
             if (!isNaN(parseFloat(this.y)) && parseFloat(this.y) >= -5 && parseFloat(this.y) <= 3) {
-                console.log("проверено y")
                 return true;
             } else {
-                console.log("не проверено y")
-                // вывод ошибки
                 return false;
             }
         },
         validateX() {
             if (this.xValidValues.includes(this.x)) {
-                console.log("проверено x")
                 return true;
             } else {
-                console.log("не проверено x")
-                // вывод ошибки
                 return false;
             }
         },
         validateR() {
             if (this.rValidValues.includes(this.r)) {
-                console.log("проверено r")
                 return true;
             } else {
-                console.log("не проверено r")
-                // вывод ошибки
                 return false;
             }
         },
-        handleSubmit() {
-        },
+
         // отправка точек на сервер
         sending(e) {
             if (this.validateX() && this.validateY() && this.validateR()) {
                 e.preventDefault();
                 const data = {
-                    'x': this.x,
-                    'y': this.y,
-                    'r': this.r,
+                    'x': this.x.replace(",", "."),
+                    'y': this.y.replace(",", "."),
+                    'r': this.r.replace(",", "."),
                     'owner': localStorage.getItem("login")
                 }
 
@@ -105,8 +91,18 @@ export default {
                 this.$axios.post('http://localhost:8080/api/dots', data);
                 console.log("отправлено");
             } else {
+                this.AxiosErrorHandler("Введены неверные данные");
                 console.log("не отправлено");
             }
+        },
+        // вывод сообщения об ошибке
+        AxiosErrorHandler(errorText) {
+            this.$notify({
+                group: 'error',
+                title: 'Ошибка',
+                text: errorText,
+                type: 'error'
+            });
         }
     }
 }

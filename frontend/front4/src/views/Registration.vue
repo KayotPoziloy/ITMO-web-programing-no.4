@@ -37,6 +37,7 @@ export default {
         }
     },
     methods: {
+        // отправка данных на сервер для авторизации
         logIn(e) {
             if (this.login !== "" && this.password !== "") {
                 e.preventDefault(); // предотвращает перезагрузку страницы
@@ -60,6 +61,7 @@ export default {
             }
 
         },
+        // отправка данных на сервер для регистрации
         register(e) {
             if (this.login !== "" && this.password !== "") {
                 e.preventDefault();
@@ -77,14 +79,14 @@ export default {
                 });
                 console.log("отправлен" + this.login);
             } else {
-                this.AxiosErrorHandler("Введите данные")
+                this.AxiosErrorHandler("Введите данные");
             }
-
         },
+        // вывод сообщения об ошибке
         AxiosErrorHandler(errorText) {
             this.$notify({
                 group: 'error',
-                title: 'Error',
+                title: 'Ошибка',
                 text: errorText,
                 type: 'error'
             })
